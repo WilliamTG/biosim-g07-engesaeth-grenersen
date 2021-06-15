@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biosim.island &#8212; Biosim 1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biosim.island</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The island module contain the main class for cells that compose the island.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">biosim.animals</span> <span class="kn">import</span> <span class="n">Herbivore</span><span class="p">,</span> <span class="n">Carnivore</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+
+
+<div class="viewcode-block" id="IslandCell"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell">[docs]</a><span class="k">class</span> <span class="nc">IslandCell</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This main class uses the features from the class Animals and the class Environments.</span>
+<span class="sd">    The class defines all methods that each cell must perform. These methods are used by the</span>
+<span class="sd">    simulation-file.</span>
+
+<span class="sd">    This class will also maintain the population in each cell and stores this information in lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Each cell needs the following parameters to function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_herb_infolist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_carn_infolist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_herb_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_carn_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newborn_herb</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newborn_carn</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_herb</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_carn</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">herbs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">herbs_incoming</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carns_incoming</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="IslandCell.remove_dead"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.remove_dead">[docs]</a>    <span class="k">def</span> <span class="nf">remove_dead</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method updates the list of animals. It uses a list comprehension</span>
+<span class="sd">        to remove items that are in the graveyard (i.e. dead animals).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">herb</span> <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span>
+                              <span class="k">if</span> <span class="n">herb</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">carn</span> <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span>
+                              <span class="k">if</span> <span class="n">carn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_aging"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_aging">[docs]</a>    <span class="k">def</span> <span class="nf">execute_aging</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method performs the aging process on the two lists of animals in a cell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="n">herb</span><span class="o">.</span><span class="n">aging</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">:</span>
+            <span class="n">carn</span><span class="o">.</span><span class="n">aging</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_weightloss"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_weightloss">[docs]</a>    <span class="k">def</span> <span class="nf">execute_weightloss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method makes all animals lose weight each year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="n">herb</span><span class="o">.</span><span class="n">change_weight</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">:</span>
+            <span class="n">carn</span><span class="o">.</span><span class="n">change_weight</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_feeding"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_feeding">[docs]</a>    <span class="k">def</span> <span class="nf">execute_feeding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method feeds the animals. The first part of the method feeds herbivores in a random</span>
+<span class="sd">        order until there is no more food in the cell or every herbivore has been fed. At the</span>
+<span class="sd">        end of this feeding process, the food for the herbivores is reset.</span>
+
+<span class="sd">        The second part of the method deals with the hunting of herbivores. To do this, the lists</span>
+<span class="sd">        of animals must be sorted by their fitness. The carnivores are sorted in reverse.</span>
+<span class="sd">        Herbivores that are eaten are removed before another carnivore tries to eat it.</span>
+<span class="sd">        Carnivores hunt until they are fed or until they have tried to catch each living herbivore.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">food</span> <span class="o">&gt;=</span> <span class="n">herb</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">]:</span>
+                <span class="n">herb</span><span class="o">.</span><span class="n">change_weight</span><span class="p">(</span><span class="n">herb</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">food</span> <span class="o">-=</span> <span class="n">herb</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">]</span>
+            <span class="n">herb</span><span class="o">.</span><span class="n">fitness</span> <span class="o">=</span> <span class="n">herb</span><span class="o">.</span><span class="n">calculate_fitness</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">reset_food</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">:</span>
+            <span class="n">carn</span><span class="o">.</span><span class="n">fitness</span> <span class="o">=</span> <span class="n">carn</span><span class="o">.</span><span class="n">calculate_fitness</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_herb_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">&quot;fitness&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitness_carn_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">attrgetter</span><span class="p">(</span><span class="s2">&quot;fitness&quot;</span><span class="p">),</span>
+                                        <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">carnivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_carn_list</span><span class="p">:</span>
+            <span class="n">consumed</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">total_consumed</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">remaining_appetite</span> <span class="o">=</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">herbivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_herb_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">hunt_herbivores</span><span class="p">(</span><span class="n">herbivore</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">herbivore</span><span class="p">)</span>
+                    <span class="n">consumed</span> <span class="o">+=</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">weight</span>
+                    <span class="n">total_consumed</span> <span class="o">+=</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">weight</span>
+                    <span class="n">remaining_appetite</span> <span class="o">-=</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">weight</span>
+                    <span class="k">if</span> <span class="n">total_consumed</span> <span class="o">&gt;=</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">]:</span>
+                        <span class="n">carnivore</span><span class="o">.</span><span class="n">change_weight</span><span class="p">(</span><span class="n">remaining_appetite</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="n">carnivore</span><span class="o">.</span><span class="n">change_weight</span><span class="p">(</span><span class="n">consumed</span><span class="p">)</span>
+                    <span class="n">consumed</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">carnivore</span><span class="o">.</span><span class="n">fitness</span> <span class="o">=</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">calculate_fitness</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fitness_herb_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">herb</span> <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_herb_list</span>
+                                      <span class="k">if</span> <span class="n">herb</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_birth"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_birth">[docs]</a>    <span class="k">def</span> <span class="nf">execute_birth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method makes the animals check if they procreate.</span>
+<span class="sd">        New animals are given a random weight and age set to 0.</span>
+<span class="sd">        Newborns are added after each animal has tried to give birth.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newborn_herb</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">herb</span><span class="o">.</span><span class="n">birth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">)):</span>
+                <span class="n">new_animal</span> <span class="o">=</span> <span class="n">Herbivore</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">newborn_herb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_animal</span><span class="p">)</span>
+                <span class="n">herb</span><span class="o">.</span><span class="n">change_weight</span><span class="p">(</span><span class="n">weight_change</span><span class="o">=</span><span class="n">new_animal</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">birth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newborn_herb</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">newborn_carn</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">carn</span><span class="o">.</span><span class="n">birth</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">)):</span>
+                <span class="n">new_animal</span> <span class="o">=</span> <span class="n">Carnivore</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">newborn_carn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_animal</span><span class="p">)</span>
+                <span class="n">carn</span><span class="o">.</span><span class="n">change_weight</span><span class="p">(</span><span class="n">weight_change</span><span class="o">=</span><span class="n">new_animal</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">birth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newborn_carn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_death"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_death">[docs]</a>    <span class="k">def</span> <span class="nf">execute_death</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method adds animals that die by random probability to the graveyard. They are removed</span>
+<span class="sd">        from the cell in the remove_dead()-method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">herb</span><span class="o">.</span><span class="n">death</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">herb</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">carn</span><span class="o">.</span><span class="n">death</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">graveyard</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">carn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IslandCell.migrate_herbivore"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.migrate_herbivore">[docs]</a>    <span class="k">def</span> <span class="nf">migrate_herbivore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">herb</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method migrates 1 herbivore into the selected neighbor&#39;s list for incoming herbivores.</span>
+<span class="sd">        I also adds this herbivore to the emigrated_herb-list so that it can be removed later.</span>
+<span class="sd">        :param herb: The herbivore that tries to migrate.</span>
+<span class="sd">        :type herb: Animals-object.</span>
+<span class="sd">        :param neighbor: The neighboring cell-object in which the animal tries to migrate to.</span>
+<span class="sd">        :type neighbor: IslandCell-object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">environment</span> <span class="o">!=</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span>
+            <span class="n">neighbor</span><span class="o">.</span><span class="n">herbs_incoming</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">herb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_herb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">herb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IslandCell.migrate_carnivore"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.migrate_carnivore">[docs]</a>    <span class="k">def</span> <span class="nf">migrate_carnivore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">carn</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This methods migrates 1 carnivore into the selected neighbor&#39;s list for incoming carnivores.</span>
+<span class="sd">        It also adds this carnivore to the emigrated_carn-list so that it can be removed later.</span>
+<span class="sd">        :param carn: The carnivore that tries to migrate.</span>
+<span class="sd">        :type carn: Animals-object.</span>
+<span class="sd">        :param neighbor: The neighboring cell-object in which the animal tries to migrate to.</span>
+<span class="sd">        :type neighbor: IslandCell-object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">neighbor</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">environment</span> <span class="o">!=</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span>
+            <span class="n">neighbor</span><span class="o">.</span><span class="n">carns_incoming</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">carn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_carn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">carn</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IslandCell.merge_migration"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.merge_migration">[docs]</a>    <span class="k">def</span> <span class="nf">merge_migration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method merges carnivore list and herbivore lists for the cell.</span>
+<span class="sd">        The lists of incoming animals are emptied after they have transferred the animal objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">herbs_incoming</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">herbs_incoming</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">carns_incoming</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carns_incoming</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="IslandCell.execute_migration"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.execute_migration">[docs]</a>    <span class="k">def</span> <span class="nf">execute_migration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method tests each animal in a cell to evaluate if it migrates, and where it would</span>
+<span class="sd">        migrate to.</span>
+<span class="sd">        If the animal migrates, the direction it moves is also determined. The direction is</span>
+<span class="sd">        randomly selected among the cell&#39;s neighbors.</span>
+<span class="sd">        The method removes animals that migrate after all animals have been evaluated in the cell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_herb</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">herbivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">calculate_fitness</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">():</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">migrate_herbivore</span><span class="p">(</span><span class="n">herbivore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">direction</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">herb</span> <span class="k">for</span> <span class="n">herb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span>
+                              <span class="k">if</span> <span class="n">herb</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_herb</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_carn</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">carnivore</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">_ani_params</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">calculate_fitness</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">():</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">migrate_carnivore</span><span class="p">(</span><span class="n">carnivore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">direction</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">carn</span> <span class="k">for</span> <span class="n">carn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span>
+                              <span class="k">if</span> <span class="n">carn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">emigrated_carn</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="IslandCell.initialize_herbs"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.initialize_herbs">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_herbs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_ani</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used for testing purposes.</span>
+<span class="sd">        It initializes a population og herbivores in a given cell</span>
+
+<span class="sd">        :param num_ani: Number of herbivores yoo want to initialize</span>
+<span class="sd">        :type num_ani: int</span>
+<span class="sd">        :param age: The age you want to give to the animal(s)</span>
+<span class="sd">        :type age: int</span>
+<span class="sd">        :param weight: the weight you want to give the animal(s)</span>
+<span class="sd">        :type weight: int ,float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">num_ani</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_ani</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">Herbivore</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_ani</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="IslandCell.initialize_carns"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.initialize_carns">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_carns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_ani</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used for testing purposes.</span>
+<span class="sd">        It initializes a population of carnivores in a given cell</span>
+
+<span class="sd">        :param num_ani: Number of carnivores yoo want to initialize</span>
+<span class="sd">        :type num_ani: int</span>
+<span class="sd">        :param age: The age you want to give to the animal(s)</span>
+<span class="sd">        :type age: int</span>
+<span class="sd">        :param weight: the weight you want to give the animal(s)</span>
+<span class="sd">        :type weight: int ,float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">num_ani</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_ani</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span> <span class="o">=</span> <span class="p">[</span><span class="n">Carnivore</span><span class="p">(</span><span class="n">age</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_ani</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="IslandCell.get_pop_herb"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.get_pop_herb">[docs]</a>    <span class="k">def</span> <span class="nf">get_pop_herb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used for testing purposes.</span>
+<span class="sd">        Counts number of herbivores in a cell on island.</span>
+<span class="sd">        :return: number of Herbivores in IslandCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_herb_pop</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IslandCell.get_pop_carn"><a class="viewcode-back" href="../../island.html#biosim.island.IslandCell.get_pop_carn">[docs]</a>    <span class="k">def</span> <span class="nf">get_pop_carn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used for testing purposes.</span>
+<span class="sd">        Counts number of carnivores in a cell on island.</span>
+<span class="sd">        :return: number of Carnivores in IslandCell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_carn_pop</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Biosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatisbiosim.html">What is Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">How to use Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../animals.html">Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../landscape.html">Landscape Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../island.html">Island Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulation.html">Simulation Module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, William Tobias Grenersen & Lars Engsæth.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

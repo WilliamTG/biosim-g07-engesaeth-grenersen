@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Island Module &#8212; Biosim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simulation Module" href="simulation.html" />
+    <link rel="prev" title="Landscape Module" href="landscape.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-biosim.island">
+<span id="island-module"></span><h1>Island Module<a class="headerlink" href="#module-biosim.island" title="Permalink to this headline">¶</a></h1>
+<p>The island module contain the main class for cells that compose the island.</p>
+<dl class="py class">
+<dt id="biosim.island.IslandCell">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.island.</code><code class="sig-name descname">IslandCell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This main class uses the features from the class Animals and the class Environments.
+The class defines all methods that each cell must perform. These methods are used by the
+simulation-file.</p>
+<p>This class will also maintain the population in each cell and stores this information in lists.</p>
+<p>Each cell needs the following parameters to function.</p>
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_aging">
+<code class="sig-name descname">execute_aging</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_aging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_aging" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method performs the aging process on the two lists of animals in a cell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_birth">
+<code class="sig-name descname">execute_birth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_birth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_birth" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method makes the animals check if they procreate.
+New animals are given a random weight and age set to 0.
+Newborns are added after each animal has tried to give birth.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_death">
+<code class="sig-name descname">execute_death</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_death"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_death" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds animals that die by random probability to the graveyard. They are removed
+from the cell in the remove_dead()-method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_feeding">
+<code class="sig-name descname">execute_feeding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_feeding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_feeding" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method feeds the animals. The first part of the method feeds herbivores in a random
+order until there is no more food in the cell or every herbivore has been fed. At the
+end of this feeding process, the food for the herbivores is reset.</p>
+<p>The second part of the method deals with the hunting of herbivores. To do this, the lists
+of animals must be sorted by their fitness. The carnivores are sorted in reverse.
+Herbivores that are eaten are removed before another carnivore tries to eat it.
+Carnivores hunt until they are fed or until they have tried to catch each living herbivore.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_migration">
+<code class="sig-name descname">execute_migration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method tests each animal in a cell to evaluate if it migrates, and where it would
+migrate to.
+If the animal migrates, the direction it moves is also determined. The direction is
+randomly selected among the cell’s neighbors.
+The method removes animals that migrate after all animals have been evaluated in the cell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.execute_weightloss">
+<code class="sig-name descname">execute_weightloss</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.execute_weightloss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.execute_weightloss" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method makes all animals lose weight each year.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.get_pop_carn">
+<code class="sig-name descname">get_pop_carn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.get_pop_carn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.get_pop_carn" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is used for testing purposes.
+Counts number of carnivores in a cell on island.
+:return: number of Carnivores in IslandCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.get_pop_herb">
+<code class="sig-name descname">get_pop_herb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.get_pop_herb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.get_pop_herb" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is used for testing purposes.
+Counts number of herbivores in a cell on island.
+:return: number of Herbivores in IslandCell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.initialize_carns">
+<code class="sig-name descname">initialize_carns</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_ani</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">age</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.initialize_carns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.initialize_carns" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is used for testing purposes.
+It initializes a population of carnivores in a given cell</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_ani</strong> (<em>int</em>) – Number of carnivores yoo want to initialize</p></li>
+<li><p><strong>age</strong> (<em>int</em>) – The age you want to give to the animal(s)</p></li>
+<li><p><strong>weight</strong> (<em>int</em><em> ,</em><em>float</em>) – the weight you want to give the animal(s)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.initialize_herbs">
+<code class="sig-name descname">initialize_herbs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_ani</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">age</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.initialize_herbs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.initialize_herbs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is used for testing purposes.
+It initializes a population og herbivores in a given cell</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_ani</strong> (<em>int</em>) – Number of herbivores yoo want to initialize</p></li>
+<li><p><strong>age</strong> (<em>int</em>) – The age you want to give to the animal(s)</p></li>
+<li><p><strong>weight</strong> (<em>int</em><em> ,</em><em>float</em>) – the weight you want to give the animal(s)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.merge_migration">
+<code class="sig-name descname">merge_migration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.merge_migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.merge_migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method merges carnivore list and herbivore lists for the cell.
+The lists of incoming animals are emptied after they have transferred the animal objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.migrate_carnivore">
+<code class="sig-name descname">migrate_carnivore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carn</span></em>, <em class="sig-param"><span class="n">neighbor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.migrate_carnivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.migrate_carnivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>This methods migrates 1 carnivore into the selected neighbor’s list for incoming carnivores.
+It also adds this carnivore to the emigrated_carn-list so that it can be removed later.
+:param carn: The carnivore that tries to migrate.
+:type carn: Animals-object.
+:param neighbor: The neighboring cell-object in which the animal tries to migrate to.
+:type neighbor: IslandCell-object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.migrate_herbivore">
+<code class="sig-name descname">migrate_herbivore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">herb</span></em>, <em class="sig-param"><span class="n">neighbor</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.migrate_herbivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.migrate_herbivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method migrates 1 herbivore into the selected neighbor’s list for incoming herbivores.
+I also adds this herbivore to the emigrated_herb-list so that it can be removed later.
+:param herb: The herbivore that tries to migrate.
+:type herb: Animals-object.
+:param neighbor: The neighboring cell-object in which the animal tries to migrate to.
+:type neighbor: IslandCell-object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.island.IslandCell.remove_dead">
+<code class="sig-name descname">remove_dead</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/island.html#IslandCell.remove_dead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.island.IslandCell.remove_dead" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method updates the list of animals. It uses a list comprehension
+to remove items that are in the graveyard (i.e. dead animals).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Biosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatisbiosim.html">What is Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">How to use Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animals.html">Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="landscape.html">Landscape Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Island Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation.html">Simulation Module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="landscape.html" title="previous chapter">Landscape Module</a></li>
+      <li>Next: <a href="simulation.html" title="next chapter">Simulation Module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, William Tobias Grenersen & Lars Engsæth.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/island.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>biosim.landscape &#8212; Biosim 1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biosim.landscape</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is the landscape module. The file contains a Environment-class, and subclasses of Environment.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lars Engesæth / William Grenersen&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;laen@nmbu.no, wigrener@nmbu.no&#39;</span>
+
+
+<div class="viewcode-block" id="Environments"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Environments">[docs]</a><span class="k">class</span> <span class="nc">Environments</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the main class for the different Environments on the island.</span>
+<span class="sd">    The currently implemented environments are the following:</span>
+<span class="sd">    -   Lowlands;</span>
+<span class="sd">    -   Highlands;</span>
+<span class="sd">    -   Desert;</span>
+<span class="sd">    -   Water.</span>
+<span class="sd">    This class assumes that the environments are habitable. If this is not the case, it will be</span>
+<span class="sd">    updated in the subclass.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">habitable</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">environment_parameter</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Each subclass may have food available.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Environments.reset_food"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Environments.reset_food">[docs]</a>    <span class="k">def</span> <span class="nf">reset_food</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resets the food for the environment when called.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="Lowlands"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Lowlands">[docs]</a><span class="k">class</span> <span class="nc">Lowlands</span><span class="p">(</span><span class="n">Environments</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the subclass &quot;Lowlands&quot;, which is a subclass of Environments.</span>
+<span class="sd">    Animals may live and feed here. The default food amount for each year is 800.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">environment_parameter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_max&#39;</span><span class="p">:</span> <span class="mi">800</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The class inherits reset_food from Environments, and defines parameters.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s1">&#39;L&#39;</span>
+
+<div class="viewcode-block" id="Lowlands.set_lowlands_params"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Lowlands.set_lowlands_params">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_lowlands_params</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that allows the user to change the default parameter in lowland. &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">new_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_params</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Parameter set input must be a dictionary&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;f_max&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_params</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;All the parameters must already exist in the parameter list&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">new_params</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;All the parameters must be greater than or equal to zero&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_params</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="Highlands"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Highlands">[docs]</a><span class="k">class</span> <span class="nc">Highlands</span><span class="p">(</span><span class="n">Environments</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the subclass &quot;Highlands&quot;, which is a subclass of Environments.</span>
+<span class="sd">    Animals may live and feed here. The default food amount for each year is 300.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">environment_parameter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_max&#39;</span><span class="p">:</span> <span class="mi">300</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The class inherits reset_food from Environments, and defines parameters.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+
+<div class="viewcode-block" id="Highlands.set_highland_params"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Highlands.set_highland_params">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_highland_params</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Method that allows the user to change the default parameter in highland.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">new_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_params</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Parameter set input must be a dictionary&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;f_max&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_params</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;All the parameters must already exist in the parameter list&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">new_params</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;All the parameters must be greater than or equal to zero&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_params</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="Desert"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Desert">[docs]</a><span class="k">class</span> <span class="nc">Desert</span><span class="p">(</span><span class="n">Environments</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the subclass &quot;Desert&quot;, which is a subclass of Environments.</span>
+<span class="sd">    Animals may live here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">environment_parameter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_max&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The class inherits reset_food from Environments, and defines parameters.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environment_parameter</span><span class="p">[</span><span class="s1">&#39;f_max&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span></div>
+
+
+<div class="viewcode-block" id="Water"><a class="viewcode-back" href="../../landscape.html#biosim.landscape.Water">[docs]</a><span class="k">class</span> <span class="nc">Water</span><span class="p">(</span><span class="n">Environments</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the subclass &quot;Water&quot;, which is a subclass of Environments.</span>
+<span class="sd">    Animals cannot live here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">habitable</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">environment_parameter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f_max&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This is a subclass of Environments.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s1">&#39;W&#39;</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Biosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../whatisbiosim.html">What is Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../read.html">How to use Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../animals.html">Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../landscape.html">Landscape Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../island.html">Island Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulation.html">Simulation Module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, William Tobias Grenersen & Lars Engsæth.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

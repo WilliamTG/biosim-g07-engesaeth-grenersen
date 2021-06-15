@@ -1,0 +1,29 @@
+Metadata-Version: 1.1
+Name: biosim
+Version: 0.5
+Summary: A simulation of an ecosystem on an isolated island with two species and four environments
+Home-page: UNKNOWN
+Author: William Tobias Grenersen, Lars Engsæth
+Author-email: wigrener@nmbu.no,laen@nmbu.no
+License: UNKNOWN
+Description: The Biosim Project
+        ==================
+        
+        Welcome to the biosim project.
+        With this package you can simulate the ecosystem on the island named Rossumøya.
+        The ecosystem consists of two unknown species, where one is a herbivore and
+        the other is a carnivore.
+        The island also consists of four different landscapes: Lowlands, highlands, desert and water.
+        Lowlands has lots of plants and is a perfect spot for the herbivore.
+        Higlands has minimal amounts of food, so fewer herbivores can live here.
+        Desert as no food, and herbivores can't live here long-term.
+        Water is non-habitable since neither of the two species can swim.
+        The carnivore will naturally live where there are herbivores for them to eat.
+        
+        For more info on how to use the package, see the documentation for the project in the docs directory.
+Keywords: biosimulation
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Pre-Alpha
+Classifier: Intended Audience :: Users
+Classifier: Topic :: Science :: Biosimulation
+Classifier: Programming Language :: Python :: 3.8

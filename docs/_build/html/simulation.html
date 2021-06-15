@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulation Module &#8212; Biosim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Island Module" href="island.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-biosim.simulation">
+<span id="simulation-module"></span><h1>Simulation Module<a class="headerlink" href="#module-biosim.simulation" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="biosim.simulation.Biosim">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.simulation.</code><code class="sig-name descname">Biosim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">island_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_population</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">img_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">img_name</span><span class="o">=</span><span class="default_value">'dv'</span></em>, <em class="sig-param"><span class="n">img_fmt</span><span class="o">=</span><span class="default_value">'png'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.build_dataframe">
+<code class="sig-name descname">build_dataframe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.build_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.build_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method builds Pandas dataframes that are used in the visualization of
+the heat maps for carnivores and herbivores. The method builds a dictionary that
+is transformed into a main dataframe, that is turned into a map for each species.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.make_movie">
+<code class="sig-name descname">make_movie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">movie_fmt</span><span class="o">=</span><span class="default_value">'mp4'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.make_movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.make_movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates MPEG4 movie from visualization images saved.
+..:note: Requires ffmpeg for MP4 and magick for GIF
+The movie is stored as img_base + movie_fmt</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.save_graphics">
+<code class="sig-name descname">save_graphics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.save_graphics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.save_graphics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save graphics with filename as given</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.set_animal_parameters">
+<code class="sig-name descname">set_animal_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">species</span></em>, <em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.set_animal_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.set_animal_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.set_landscape_parameters">
+<code class="sig-name descname">set_landscape_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">land</span></em>, <em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.set_landscape_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.set_landscape_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.simulate">
+<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cycles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vis_steps</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">img_steps</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method performs the simulation. The method takes cycles to determine the length of the
+simulation, and then iterates through every cell on the island.
+This method also updates the visual graphs, so that the user can see the development.
+If the user want, this method can also save figures and create a video of these images
+and save that video to the disk.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.update_carn_counter">
+<code class="sig-name descname">update_carn_counter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.update_carn_counter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.update_carn_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method counts total number of carnivores on the island.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="biosim.simulation.Biosim.update_herb_counter">
+<code class="sig-name descname">update_herb_counter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">herbs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/simulation.html#Biosim.update_herb_counter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.simulation.Biosim.update_herb_counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method counts total number of herbivores on the island.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Biosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatisbiosim.html">What is Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="read.html">How to use Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animals.html">Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="landscape.html">Landscape Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="island.html">Island Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simulation Module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="island.html" title="previous chapter">Island Module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, William Tobias Grenersen & Lars Engsæth.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simulation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

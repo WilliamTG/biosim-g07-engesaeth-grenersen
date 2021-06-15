@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use Biosim &#8212; Biosim 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Animals Module" href="animals.html" />
+    <link rel="prev" title="What is Biosim" href="whatisbiosim.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-use-biosim">
+<h1>How to use Biosim<a class="headerlink" href="#how-to-use-biosim" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to the Bioim projects infopage on how to use and run biosim.
+There is not a lot that needs to be in place for you to take your first swing at
+our biosimulation.</p>
+<p>First you will need to define a map of the island you want to simulate on.
+The island is build up via a docstring, and consists of only the letters:
+W,D,L,H. Use any other letter or symbol and an error will be raised.
+For an example of how an island would look, check out the example file in the package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do NOT include any “space” symbols in the island string</p>
+</div>
+<p>Second you will need an initial population of both herbivores and carnivores.
+The way you implement them is done in a very specific way, so do exactly as we describe it.
+The population is a list, with a dictionary as its first object.
+The dictionary consists of two keys: ‘loc’ and ‘pop’.
+‘loc’ shall have a tuple with the coordinate you want to place your animals.
+If you would create an island consisting of 10 letters wide og 10 letters tall, then
+the top left corner would be coordinate (1,1) while the down right corner would be (10,10).
+Remember that you can’t place animals in water, this will raise an error.
+‘pop’ shall have a list consisting of dictionaries, where each dictionary is an animal.
+The dictionaries shall have three keys: ‘species’, ‘age, ‘weight’.
+‘species’ can only have two different values: ‘Herbivore’ or ‘Carnivore’
+‘age’ is an integer, and can’t be negative
+‘weight’ can be a float or an integer, but it can’t equal zero or be a negative number.
+To see an example on how this can be done, check out the example file we have provided in the package.
+Create both an initial herbivore population and an initial carnivore population.
+The normal way of simulating is to start with the herbivore population.
+We will show you how to implement both.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the structure is not exactly as described you will
+not be able to place the animals on the island.</p>
+</div>
+<p>You can also choose your own seed. The seed can be any integer number you want.
+It will only make sure if you run the same simulation with the same seed that the outcome
+of the simulation will be the same.</p>
+<p>Now that the main parameters as set yuo would need to call the Biosim class.
+Do as follows:</p>
+<p>sim = Biosim(island_map = map, initial_population=ini_herbs, seed=123456)
+This way you start with the herbivore population.</p>
+<p>You are now ready to simulate. But if you would like, you can change som parameters to
+change the outcome of the simulation.</p>
+<p>You can change the animal parameters be calling the method sim.set_animal_parameters().
+The method takes two arguments: species and params.
+Species is a string and can only be either ‘Herbivore’ or ‘Carnivore’.
+params is a dictionary where the key is the parameter you want to change in the form of a string
+while the value connected to the key is a float.
+To see all the values you are able to change, see the documentation for the animal module.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can only change parameters that already exists.</p>
+</div>
+<p>You can also change the food you would like to provide the herbivores in the landscapes Lowlands
+and Highlands. This can be done by calling the method sim.set_landscape_parameters().
+This method also takes two arguments: land and params.
+land is a string and can only be either ‘L’ or ‘H’.
+parmas is a dictionary, and the only key that can be placed in it is ‘f_max’.
+The value of ‘f_max’ can be anything you want, as long as it is an integer value.
+The standards as 800 for Lowlands and 300 for Highlands.</p>
+<p>After you have set the parameters to your desire you are ready to simulate.
+To start simulating you will need to run the simulate method.
+This method takes two arguments: num_years and vis_years.
+num_years is the number of years you want to simulate. 2- or 300 is the normal amount.
+vis_year is just a number for how often you would like the graphics to update.
+The standard here is 1.</p>
+<p>run:</p>
+<p>sim.simulate(num_years=100,vis_years=1)
+sim.add_population(population=ini_carns)
+sim.simulate(num_years=100,vis_years=1)</p>
+<p>If you need a more hands on example, check out the example file provided in the package.
+Or if you are wondering what methods are used in the simulation check out the rest of the documentation.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Biosim</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whatisbiosim.html">What is Biosim</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to use Biosim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="animals.html">Animals Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="landscape.html">Landscape Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="island.html">Island Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation.html">Simulation Module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="whatisbiosim.html" title="previous chapter">What is Biosim</a></li>
+      <li>Next: <a href="animals.html" title="next chapter">Animals Module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, William Tobias Grenersen & Lars Engsæth.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/read.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
