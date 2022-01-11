@@ -34,7 +34,7 @@ def test_aging():
     assert island_cell.cell_herb_pop[0].age == 1
 
 
-def test_sommerkroppen_2021():
+def test_weight_loss():
     """
         The test will test for the yearly weight loss function
         If it does, the Herbivore objects weight should reduce with 5% of its current weight
